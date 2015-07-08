@@ -1,0 +1,45 @@
+{% if visibleSkill %}
+<div class="col-sm-6">
+    <section class="panel">
+        <header class="panel-heading"><span class="h5">Skill Data</span></header>
+        <table class="table table-striped m-b-none text-sm">
+            <thead>
+            <tr>
+                <th>Skill</th>
+                <th width="70"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for i in skillData %}
+            <tr id="tr_{{i.seqSkill}}">
+                <td class="skill">{{i.nameSkill}}</td>
+                <td>
+
+                    <div class="btn-group"
+                         onclick="edit_data('editSkill',{{i.seqSkill}})">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           data-original-title="Edit">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>
+                    &nbsp;
+                    <div class="btn-group"
+                         onclick="delete_data('delSkill',{{i.seqSkill}})">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="tooltip"
+                           data-placement="top" data-original-title="Delete">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endif %}

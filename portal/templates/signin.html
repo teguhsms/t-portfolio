@@ -1,0 +1,171 @@
+<!doctype html>
+<html class="signin no-js" lang="" xmlns="http://www.w3.org/1999/html">
+
+<!-- Mirrored from sublime.nyasha.me/admin/signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 30 Jan 2015 04:37:24 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Flat, Clean, Responsive, application admin template built with bootstrap 3">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+    <title>Teguh SMS Portofolio - Web Application Admin Dashboard</title>
+
+     <link rel="stylesheet" href="{{ MEDIA_URL }}css/bootstrap.css"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/formValidation.css"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}index/fonts/font-awesome.css">
+
+
+    <link rel="stylesheet" href="{{ MEDIA_URL }}index/css/skins/palette.css">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}index/fonts/font.css">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}index/css/main.css">
+
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery/jquery.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{{ MEDIA_URL }}index/js/modernizr.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#defaultForm').keydown(function(event) {
+                if (event.keyCode == 13) {
+                    $('#submit').click();
+                }
+            });
+            $('#submit').click(function(){
+                var uname = $('input[name=username]').val();
+                var passwd = $('input[name=password]').val();
+                /* statement if data is empty */
+                if (uname == ''){
+                    document.getElementById("uname").focus();
+                    return
+                } if (passwd == ''){
+                    document.getElementById("passwd").focus();
+                    return
+                }
+                /* statement ajax */
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '{% url signin %}',
+                    data: {
+                        'uname': uname,
+                        'passwd': passwd,
+                        'csrfmiddlewaretoken':'{{csrf_token}}'},
+                    success:function(response){
+                        if (response.err == 'tidak error'){
+                            alert(response.alert);
+                            window.location = '{% url index2 %}'
+                        } else {
+                            $("#alert" ).html(response.alert, response.alert2);
+                            $("#alert2" ).html(response.alert2);
+                            $("#alert").fadeOut(3000);
+                            $("#alert2").fadeOut(4000);
+                        }
+                    }
+                });
+
+            });
+        });
+
+    </script>
+</head>
+<body class="bg-primary">
+<div class="cover" style="background-image: url({{ MEDIA_URL }}index/img/cover3.jpg)"></div>
+<div class="overlay bg-primary"></div>
+<div class="center-wrapper">
+    <div class="center-content">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <section class="panel bg-white no-b">
+                    <ul class="switcher-dash-action">
+                        <li class="active"><a href="#" class="selected">Sign in</a></li>
+                        <li><a href="{% url signup %}" class="">New account</a></li>
+                    </ul>
+                    <div class="p15">
+                        <div id="alert" style="color:red;text-align:center;"></div>
+                        <div id="alert2" style="color:red;text-align:center;"></div>
+                        <p></p>
+                        <form id="defaultForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg mb5" name="username" id="uname" placeholder="Username" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control input-lg mb5" name="password" id="passwd" placeholder="Password" />
+                            </div>
+
+                            <!--<div class="show">
+                                <div class="pull-right">
+                                    <a href="forgot.html">Forgot password?</a>
+                                </div>
+                                <label class="checkbox">
+                                    <input type="checkbox" value="remember-me">Remember me
+                                </label>
+                            </div>-->
+                            <input type="submit" id="submit" class="btn btn-primary btn-lg btn-block" value="Sign in" />
+                        </form>
+                    </div>
+                </section>
+                <p class="text-center">
+                    Copyright &copy;
+                    <span id="year" class="mr5"></span>
+                    <span>Teguh SMS</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#defaultForm').formValidation({
+            message: 'This value is not valid',
+            excluded: ':disabled',
+            icon: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {
+                            message: 'The username is required and cannot be empty'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The password is required and can\'t be empty'
+                        }
+                    }
+                }
+            }
+        })
+        .on('err.field.fv', function(e, data) {
+            if (data.fv.getSubmitButton()) {
+                data.fv.disableSubmitButtons(false);
+            }
+        })
+        .on('success.field.fv', function(e, data) {
+            if (data.fv.getSubmitButton()) {
+                data.fv.disableSubmitButtons(false);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+        var el = document.getElementById("year"),
+            year = (new Date().getFullYear());
+        el.innerHTML = year;
+
+</script>
+
+<script type="text/javascript" src="{{ MEDIA_URL }}js/formValidation.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/framework/bootstrap.js"></script>
+</body>
+
+</html>

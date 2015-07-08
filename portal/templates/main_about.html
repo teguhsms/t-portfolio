@@ -1,0 +1,92 @@
+{% if visibleSkill %}
+<section id="about" class="sec-pattern">
+    <div class="container">
+        {% for i in aboutData %}
+            <div class="row margin-lg">
+                <h1 class="main-title text-center wow fadeIn">About</h1>
+
+                <div class="col-sm-3">
+                    <div class="about-left text-right wow fadeInLeft">
+                        <ul>
+                            <li>
+                                <span>Date of birthaaaa</span>
+                                {{i.dob|date:"d F Y "}}
+                                <i class="fa fa-calendar"></i>
+
+                            </li>
+                            <li>
+                                <span>Place Of Birth</span>
+                                {{i.pob}}
+                                <i class="fa fa-map-marker"></i>
+
+                            </li>
+                            <li>
+                                <span>Profession</span>
+                                {{ i.profession }}
+                                <!--Web, Design & Development-->
+                                <i class="fa fa-user-md"></i>
+                            </li>
+                            <li>
+                                <span>Interests</span>
+                                {{ i.interests}}
+                                <!--Gaming, Films, Adventure-->
+                                <i class="fa fa-heart"></i>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 wow fadeIn">
+                    <img src="{{ MEDIA_URL}}index/img/about.jpg" class="img-responsive img-circle img-about"
+                         alt="about-portrait">
+                </div>
+                <div class="col-sm-3">
+                    <div class="about-right text-left wow fadeInRight">
+                        <ul>
+                            <li>
+                                <span>Place of residence</span>
+                                <i class="fa fa-map-marker"></i>
+                                {{ i.residence }}
+                                <!--London, United Kingdom-->
+
+                            </li>
+                            <li>
+                                <span>Phone</span>
+                                <i class="fa fa-phone"></i>
+                                {{ i.phone }}
+
+                            </li>
+                            <li>
+                                <span>Email</span>
+                                <i class="fa fa-envelope"></i>
+                                {{ i.email|lower }}
+
+                            </li>
+                            <li>
+                                <span>Website</span>
+                                <i class="fa fa-globe"></i>
+                                {{ i.website }}
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-offset-3 col-xs-6 col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6 wow fadeInUp">
+                        <h2 class="sub-title text-center">{{ i.name }}</h2>
+
+                        <p class="text-center bio">
+                            {{ i.desc }}
+                        </p>
+
+                        <p class="text-center margin-md">
+                            <a href="#contact" class="btn btn-about smooth">Hire Me</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

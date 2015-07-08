@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Web Application | About</title>
+    <meta name="description"
+          content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/app.v2.css"/>
+    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/font.css" cache="false"/>
+    <!-- picker -->
+    <link type="text/css" rel="stylesheet"
+          href="{{ MEDIA_URL}}assets-panel2/vendors/bootstrap-datepicker/css/datepicker.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-colorpicker/css/colorpicker.css">
+    <link type="text/css" rel="stylesheet"
+          href="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link type="text/css" rel="stylesheet"
+          href="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet"
+          href="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
+
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/js/datatables/datatables.css">
+
+    <!--[if lt IE 9]>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/respond.min.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/html5.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/fix.js" cache="false"></script>
+    <![endif]-->
+
+    <!-- jquery -->
+    <script src="{{ MEDIA_URL }}assets-panel/js/jquery.js"></script>
+
+
+    <!-- ==============================================
+    Fonts
+    =============================================== -->
+    <link href="{{ MEDIA_URL }}css/cssb828.css?family=Lato:400,300,300italic,400italic,700,700italic,900"
+          rel='stylesheet' type='text/css'>
+
+
+    <script type="text/javascript">
+        function create_data(type){
+            /* statement for create about inf */
+            var name = $('input[name=name]').val();
+            var dob = $('input[name=dob]').val();
+            var pob = $('input[name=pob]').val();
+            var profession = $('input[name=profession]').val();
+            var interests = $('input[name=interests]').val();
+            var residence = $('input[name=residence]').val();
+            var phone = $('input[name=phone]').val();
+            var email = $('input[name=email]').val();
+            var website = $('input[name=website]').val();
+            var desc = $('textarea#editor').val();
+            /* statement ajax */
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '{% url about %}',
+                data: {
+                    'action': type,
+                    'name': name,
+                    'dob': dob,
+                    'pob': pob,
+                    'profession': profession,
+                    'interests': interests,
+                    'residence': residence,
+                    'phone': phone,
+                    'email': email,
+                    'website': website,
+                    'desc': desc,
+                    'csrfmiddlewaretoken':'{{csrf_token}}'},
+                success:function(response){
+                    alert(response.alert);
+                    window.location = '{% url about %}'
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<section class="hbox stretch"> <!-- .aside -->
+<aside class="bg-dark aside-sm" id="nav">
+    <section class="vbox">
+        <header class="dker nav-bar">
+            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a href="#" class="nav-brand" data-toggle="fullscreen">Admin Panel</a>
+            <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                <i class="fa fa-comment-o"></i>
+            </a>
+        </header>
+        <section>
+            <div class="lter nav-user hidden-xs pos-rlt">
+                <div class="nav-avatar pos-rlt"><a href="#" class="thumb-sm avatar animated rollIn"
+                                                   data-toggle="dropdown"> <img
+                        src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt=""
+                        class=""> <span
+                        class="caret caret-white"></span> </a>
+                    <ul class="dropdown-menu m-t-sm animated fadeInLeft"><span class="arrow top"></span>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#"> <span class="badge bg-danger pull-right">3</span> Notifications </a></li>
+                        <li class="divider"></li>
+                        <li><a href="docs.html">Help</a></li>
+                        <li><a href='{% url logout %}'>Logout</a></li>
+                    </ul>
+                    <div class="visible-xs m-t m-b"><a href="#" class="h3">John.Smith</a>
+
+                        <p><i class="fa fa-map-marker"></i> London, UK</p></div>
+                </div>
+                <div class="nav-msg"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <b
+                        class="badge badge-white count-n">2</b> </a>
+                    <section class="dropdown-menu m-l-sm pull-left animated fadeInRight">
+                        <div class="arrow left"></div>
+                        <section class="panel bg-white">
+                            <header class="panel-heading"><strong>You have <span class="count-n">2</span>
+                                notifications</strong></header>
+                            <div class="list-group"><a href="#" class="media list-group-item"> <span
+                                    class="pull-left thumb-sm"> <img
+                                    src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt="John said"
+                                    class="img-circle"> </span> <span
+                                    class="media-body block m-b-none"> Use awesome animate.css<br> <small
+                                    class="text-muted">28 Aug 13
+                            </small> </span> </a> <a href="#" class="media list-group-item"> <span
+                                    class="media-body block m-b-none"> 1.0 initial released<br> <small
+                                    class="text-muted">27 Aug 13
+                            </small> </span> </a></div>
+                            <footer class="panel-footer text-sm"><a href="#" class="pull-right"><i
+                                    class="fa fa-cog"></i></a> <a href="#">See all the notifications</a></footer>
+                        </section>
+                    </section>
+                </div>
+            </div>
+            <nav class="nav-primary hidden-xs">
+                <ul class="nav">
+                    <li><a href="{% url index2 %}"> <i class="fa fa-eye"></i> <span>Discover</span> </a></li>
+                    <li class="dropdown-submenu active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-flask"></i> <span>UI kit</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="buttons.html">Buttons</a></li>
+                            <li><a href="{% url icons %}"> <b class="badge pull-right">302</b>Icons </a></li>
+                            <li><a href="grid.html">Grid</a></li>
+                            <li><a href="widgets.html"> <b class="badge bg-primary pull-right">8</b>Widgets </a>
+                            </li>
+                            <li><a href="components.html"> <b class="badge pull-right">18</b>Components </a></li>
+                            <li><a href="list.html">List groups</a></li>
+                            <li><a href="table.html">Table</a></li>
+                            <li><a href="form.html">Form</a></li>
+                            <li><a href="chart.html">Chart</a></li>
+                            <li><a href="calendar.html">Fullcalendar</a></li>
+                            <li><a href="portlet.html">Portlet</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+                            class="fa fa-file-text"></i> <span>Pages</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url header %}">Main Nav</a></li>
+                            <li><a href="{% url services %}">Services</a></li>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="dashboard-1.html">Dashboard one</a></li>
+                            <li><a href="dashboard-2.html">Dashboard layout</a></li>
+                            <li><a href="analysis.html">Analysis</a></li>
+                            <li><a href="master.html">Master</a></li>
+                            <li><a href="maps.html">Maps</a></li>
+                            <li><a href="gallery.html">Gallery</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="invoice.html">Invoice</a></li>
+                            <li><a href="signin.html">Signin page</a></li>
+                            <li><a href="signup.html">Signup page</a></li>
+                            <li><a href="404.html">404 page</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="mail.html"> <b class="badge bg-primary pull-right">3</b> <i
+                            class="fa fa-envelope-o"></i> <span>Mail</span> </a></li>
+                    <li><a href="tasks.html"> <i class="fa fa-tasks"></i> <span>Tasks</span> </a></li>
+                    <li><a href="notes.html"> <i class="fa fa-pencil"></i> <span>Notes</span> </a></li>
+                    <li><a href="timeline.html"> <i class="fa fa-clock-o"></i> <span>Timeline</span> </a></li>
+                </ul>
+            </nav>
+        </section>
+        <footer class="footer bg-gradient hidden-xs"><a href="{% url lockme %}" data-toggle="ajaxModal"
+                                                        class="btn btn-sm btn-link m-r-n-xs pull-right"> <i
+                class="fa fa-power-off"></i> </a> <a href="#nav" data-toggle="class:nav-vertical"
+                                                     class="btn btn-sm btn-link m-l-n-sm"> <i
+                class="fa fa-bars"></i> </a></footer>
+    </section>
+</aside>
+<!-- /.aside --> <!-- .vbox -->
+<section id="content">
+<section class="vbox">
+    <header class="header bg-dark bg-gradient">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#about" data-toggle="tab">Header</a></li>
+            <li class=""><a href="#validation" data-toggle="tab">Validation</a></li>
+        </ul>
+    </header>
+    <section class="scrollable wrapper">
+        <div class="tab-content">
+            <section class="tab-pane active" id="about">
+                <!-- About Information -->
+                <section class="panel">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                               class="accordion-toggle">
+                                <i class="fa fa-bars"></i>
+                                &nbsp; About Information
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form role="form" class="parsley-form" data-parsley-validate>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Name</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="name"
+                                                       data-parsley-required="true"
+                                                       placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div id="viewcode-date-picker-default">
+                                                <label>Date of Birth</label>
+
+                                                <div>
+                                                    <input type="text" class="datepicker-default form-control"
+                                                           name="dob" data-date-format="yyyy-mm-dd"
+                                                           data-parsley-required="true"
+                                                           data-parsley-trigger="change" placeholder="dd/mm/yyyy"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Place of Birth</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="pob"
+                                                       data-parsley-required="true" data-parsley-trigger="change"
+                                                       placeholder="Place of Birth">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Profession</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="profession"
+                                                       data-parsley-required="true"
+                                                       data-parsley-trigger="change" placeholder="Profession">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Interests</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="interests"
+                                                       data-parsley-required="true" data-parsley-trigger="change"
+                                                       placeholder="Interests">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Residence</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="residence"
+                                                       data-parsley-required="true"
+                                                       data-parsley-trigger="change" placeholder="Residence">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Phone</label>
+
+                                            <div>
+                                                <input class="form-control" name="phone"
+                                                       data-parsley-required="true" data-parsley-trigger="change "
+                                                       data-parsley-minlength="5" data-parsley-maxlength="100"
+                                                       data-parsley-validation-threshold="10"
+                                                       data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.."
+                                                       placeholder="+99 999 9999 9999">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="email"
+                                                       data-parsley-type="email"
+                                                       data-parsley-required="true" data-parsley-trigger="change"
+                                                       placeholder="teguh@porto.me">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Website</label>
+
+                                            <div>
+                                                <input type="text" class="form-control" name="website"
+                                                       data-parsley-type="url"
+                                                       data-parsley-required="true" data-parsley-trigger="change"
+                                                       placeholder="http://porto.me/">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Description</label>
+
+
+                                            <div class="btn-toolbar m-b-sm btn-editor"
+                                                 data-role="editor-toolbar"
+                                                 data-target="#editor">
+                                                <div class="btn-group"><a
+                                                        class="btn btn-white btn-sm dropdown-toggle"
+                                                        data-toggle="dropdown" title="Font"><i
+                                                        class="fa fa-font"></i><b class="caret"></b></a>
+                                                    <ul class="dropdown-menu"></ul>
+                                                </div>
+                                                <div class="btn-group"><a
+                                                        class="btn btn-white btn-sm dropdown-toggle"
+                                                        data-toggle="dropdown" title="Font Size"><i
+                                                        class="fa fa-text-height"></i>&nbsp;<b
+                                                        class="caret"></b></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a data-edit="fontSize 5"><font size="5">Huge</font></a>
+                                                        </li>
+                                                        <li><a data-edit="fontSize 3"><font
+                                                                size="3">Normal</font></a>
+                                                        </li>
+                                                        <li><a data-edit="fontSize 1"><font
+                                                                size="1">Small</font></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="btn-group"><a class="btn btn-white btn-sm"
+                                                                          data-edit="bold"
+                                                                          title="Bold (Ctrl/Cmd+B)"><i
+                                                        class="fa fa-bold"></i></a> <a
+                                                        class="btn btn-white btn-sm"
+                                                        data-edit="italic"
+                                                        title="Italic (Ctrl/Cmd+I)"><i
+                                                        class="fa fa-italic"></i></a> <a
+                                                        class="btn btn-white btn-sm"
+                                                        data-edit="strikethrough"
+                                                        title="Strikethrough"><i
+                                                        class="fa fa-strikethrough"></i></a> <a
+                                                        class="btn btn-white btn-sm" data-edit="underline"
+                                                        title="Underline (Ctrl/Cmd+U)"><i
+                                                        class="fa fa-underline"></i></a></div>
+
+
+                                                <div class="btn-group"><a class="btn btn-white btn-sm"
+                                                                          data-edit="undo"
+                                                                          title="Undo (Ctrl/Cmd+Z)"><i
+                                                        class="fa fa-undo"></i></a> <a
+                                                        class="btn btn-white btn-sm"
+                                                        data-edit="redo"
+                                                        title="Redo (Ctrl/Cmd+Y)"><i
+                                                        class="fa fa-repeat"></i></a></div>
+                                                <input type="text" class="form-control-trans pull-left"
+                                                       data-edit="inserttext" id="voiceBtn" x-webkit-speech=""
+                                                       style="width:25px;height:28px;"></div>
+                                            <textarea id="editor" class="form-control"
+                                                      style="overflow:scroll;height:150px;max-height:150px"
+                                                      data-parsley-required="true" data-parsley-trigger="change"
+                                                      data-parsley-minlength="10"
+                                                      data-parsley-minlength-message="You need to enter at least a 10 character comment.."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div onclick="create_data('about')"><input type="submit" id="submit"
+                                                                                       class="btn btn-success btn-block btn-md btn-parsley"
+                                                                                       value="submit"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {% for i in aboutData %}
+                                        <label>{{i.name}} {{i.dob|date:"d F Y "}} {{i.pob}}</label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </section>
+                <section class="panel">
+                    <header>
+                        <h2 class="heading">Basic Table</h2>
+                    </header>
+                    <div class="contents">
+                        <a class="togglethis">Toggle</a>
+                        <section>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Larry</td>
+                                    <td>the Bird</td>
+                                    <td>@twitter</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                    <!--<header class="panel-heading"> DataTables <i class="fa fa-info-sign text-muted"
+                                                                 data-toggle="tooltip" data-placement="bottom"
+                                                                 data-title="ajax to load the data."></i>
+                    </header>
+                    <div class="table-responsive">
+                        <table class="table table-striped m-b-none" data-ride="datatables">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Place of Birth</th>
+                                <th>Profession</th>
+                                <th>Interests</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in aboutData %}
+                            <tr>
+                                <td>{{i.dob|date:"d F Y "}}</td>
+                                <td>{{i.pob}}</td>
+                                <td>{{i.profession}}</td>
+                                <td>{{i.interests}}</td>
+                                <td>{{i.residence}}</td>
+                                <td>
+                                    <div class="btn-group"
+                                         onclick="edit_data('editSkill',{{i.seqSkill}})">
+                                        <a href="#" class="dropdown-toggle"
+                                           data-toggle="tooltip"
+                                           data-placement="top"
+                                           data-original-title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </div>
+                                    &nbsp;
+                                    <div class="btn-group"
+                                         onclick="delete_data('delSkill',{{i.seqSkill}})">
+                                        <a href="#" class="dropdown-toggle"
+                                           data-toggle="tooltip"
+                                           data-placement="top" data-original-title="Delete">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>-->
+                </section>
+            </section>
+        </div>
+    </section>
+
+</section>
+</section>
+</section>
+
+<!-- /.vbox -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/app.v2.js"></script>
+<!-- parsley -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/parsley/parsley.min.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="{{ MEDIA_URL }}js/ui-tabs-accordions.js"></script>
+<!-- wysiwyg -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/wysiwyg/bootstrap-wysiwyg.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/js/wysiwyg/jquery.hotkeys.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/js/wysiwyg/demo.js"></script>
+<!-- picker -->
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-daterangepicker/moment.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/js/form-picker.js"></script>
+
+<script src="{{ MEDIA_URL }}assets-panel2/js/datatables/jquery.dataTables.min.js"></script>
+
+<script>
+    jQuery(document).ready(function () {
+        form_picker.init();
+    });
+</script>
+
+</body>
+</html>

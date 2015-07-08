@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Web Application | todo</title>
+    <meta name="description"
+          content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/font.css" type="text/css" cache="false"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/js/select2/select2.css" type="text/css"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/app.v2.css" type="text/css"/>
+
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}assets-panel2/js/fancybox/source/jquery.fancybox.css" media="screen" />
+
+    <!--[if lt IE 9]>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/respond.min.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/html5.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/fix.js" cache="false"></script> <![endif]-->
+
+    <!-- ==============================================
+		CSS Services
+	=============================================== -->
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/font-awesome.css">
+    <link id="main" rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/designr-theme-cyan2.css">
+    <link id="theme" rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/designr-theme-cyan2.css">
+
+    <!-- ==============================================
+    Fonts
+    =============================================== -->
+    <link href="{{ MEDIA_URL }}css/cssb828.css?family=Lato:400,300,300italic,400italic,700,700italic,900"
+          rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript">
+        function create_data(type){
+            /* statement for create service */
+            var title = $('input[name=title]').val();
+            var desc = $('input[name=desc]').val();
+            var icon = $('input[name=icon]').val();
+            var idIcon = $('input[name=idService]').val();
+            if (title == ''){
+                alert("Please fill service title");
+                document.getElementById("title").focus();
+                return
+            } if (desc == ''){
+                alert("Please fill service description");
+                document.getElementById("desc").focus();
+                return
+            } if (desc == ''){
+                alert("Please fill service icon");
+                document.getElementById("icon").focus();
+                return
+            }
+            alert(title);
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '{% url services %}',
+                data: {
+                    'action': type,
+                    'title': title,
+                    'desc': desc,
+                    'icon': icon,
+                    'id': idIcon,
+                    'csrfmiddlewaretoken':'{{csrf_token}}'
+                },
+                success:function(response){
+                    alert(response.alert);
+                    $('input[name=title]').val('');
+                    $('input[name=desc]').val('');
+                    $('input[name=icon]').val('');
+                    window.location = '{% url services %}'
+                }
+            });
+        }
+        function choose(type){
+            $('input[name=icon]').val(type);
+            javascript:parent.jQuery.fancybox.close();
+        }
+    </script>
+</head>
+<body>
+<section class="hbox stretch"> <!-- .aside -->
+<aside class="bg-dark aside-sm" id="nav">
+    <section class="vbox">
+        <header class="dker nav-bar">
+            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a href="#" class="nav-brand" data-toggle="fullscreen">Admin Panel</a>
+            <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                <i class="fa fa-comment-o"></i>
+            </a>
+        </header>
+        <section>
+            <div class="lter nav-user hidden-xs pos-rlt">
+                <div class="nav-avatar pos-rlt"><a href="#" class="thumb-sm avatar animated rollIn"
+                                                   data-toggle="dropdown"> <img
+                        src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt=""
+                        class=""> <span
+                        class="caret caret-white"></span> </a>
+                    <ul class="dropdown-menu m-t-sm animated fadeInLeft"><span class="arrow top"></span>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#"> <span class="badge bg-danger pull-right">3</span> Notifications </a></li>
+                        <li class="divider"></li>
+                        <li><a href="docs.html">Help</a></li>
+                        <li><a href='{% url logout %}'>Logout</a></li>
+                    </ul>
+                    <div class="visible-xs m-t m-b"><a href="#" class="h3">John.Smith</a>
+
+                        <p><i class="fa fa-map-marker"></i> London, UK</p></div>
+                </div>
+                <div class="nav-msg"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <b
+                        class="badge badge-white count-n">2</b> </a>
+                    <section class="dropdown-menu m-l-sm pull-left animated fadeInRight">
+                        <div class="arrow left"></div>
+                        <section class="panel bg-white">
+                            <header class="panel-heading"><strong>You have <span class="count-n">2</span>
+                                notifications</strong></header>
+                            <div class="list-group"><a href="#" class="media list-group-item"> <span
+                                    class="pull-left thumb-sm"> <img
+                                    src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt="John said"
+                                    class="img-circle"> </span> <span
+                                    class="media-body block m-b-none"> Use awesome animate.css<br> <small
+                                    class="text-muted">28 Aug 13
+                            </small> </span> </a> <a href="#" class="media list-group-item"> <span
+                                    class="media-body block m-b-none"> 1.0 initial released<br> <small
+                                    class="text-muted">27 Aug 13
+                            </small> </span> </a></div>
+                            <footer class="panel-footer text-sm"><a href="#" class="pull-right"><i
+                                    class="fa fa-cog"></i></a> <a href="#">See all the notifications</a></footer>
+                        </section>
+                    </section>
+                </div>
+            </div>
+            <nav class="nav-primary hidden-xs">
+                <ul class="nav">
+                    <li><a href="{% url index2 %}"> <i class="fa fa-eye"></i> <span>Discover</span> </a></li>
+                    <li class="dropdown-submenu active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-flask"></i> <span>UI kit</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="buttons.html">Buttons</a></li>
+                            <li><a href="{% url icons %}"> <b class="badge pull-right">302</b>Icons </a></li>
+                            <li><a href="grid.html">Grid</a></li>
+                            <li><a href="widgets.html"> <b class="badge bg-primary pull-right">8</b>Widgets </a>
+                            </li>
+                            <li><a href="components.html"> <b class="badge pull-right">18</b>Components </a></li>
+                            <li><a href="list.html">List groups</a></li>
+                            <li><a href="table.html">Table</a></li>
+                            <li><a href="form.html">Form</a></li>
+                            <li><a href="chart.html">Chart</a></li>
+                            <li><a href="calendar.html">Fullcalendar</a></li>
+                            <li><a href="portlet.html">Portlet</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+                            class="fa fa-file-text"></i> <span>Pages</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url header %}">Main Nav</a></li>
+                            <li><a href="{% url services %}">Services</a></li>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="dashboard-1.html">Dashboard one</a></li>
+                            <li><a href="dashboard-2.html">Dashboard layout</a></li>
+                            <li><a href="analysis.html">Analysis</a></li>
+                            <li><a href="master.html">Master</a></li>
+                            <li><a href="maps.html">Maps</a></li>
+                            <li><a href="gallery.html">Gallery</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="invoice.html">Invoice</a></li>
+                            <li><a href="signin.html">Signin page</a></li>
+                            <li><a href="signup.html">Signup page</a></li>
+                            <li><a href="404.html">404 page</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="mail.html"> <b class="badge bg-primary pull-right">3</b> <i
+                            class="fa fa-envelope-o"></i> <span>Mail</span> </a></li>
+                    <li><a href="tasks.html"> <i class="fa fa-tasks"></i> <span>Tasks</span> </a></li>
+                    <li><a href="notes.html"> <i class="fa fa-pencil"></i> <span>Notes</span> </a></li>
+                    <li><a href="timeline.html"> <i class="fa fa-clock-o"></i> <span>Timeline</span> </a></li>
+                </ul>
+            </nav>
+        </section>
+        <footer class="footer bg-gradient hidden-xs"><a href="{% url lockme %}" data-toggle="ajaxModal"
+                                                        class="btn btn-sm btn-link m-r-n-xs pull-right"> <i
+                class="fa fa-power-off"></i> </a> <a href="#nav" data-toggle="class:nav-vertical"
+                                                     class="btn btn-sm btn-link m-l-n-sm"> <i
+                class="fa fa-bars"></i> </a></footer>
+    </section>
+</aside>
+<!-- /.aside --> <!-- .vbox -->
+<section id="content">
+<section class="vbox">
+<header class="header bg-dark bg-gradient">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#service" data-toggle="tab">Services</a></li>
+    </ul>
+</header>
+<section class="scrollable wrapper">
+<div class="tab-content">
+    <section class="panel">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                   class="accordion-toggle">
+                    <i class="fa fa-bars"></i>
+                    &nbsp; Menu for Services
+                </a>
+            </h5>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div data-validate="parsley">
+                            <section class="panel">
+                                <header class="panel-heading"><span
+                                        class="h5">Services Information</span>
+                                </header>
+                                <div class="panel-body">
+
+                                    <div class="form-group pull-in clearfix">
+                                        <div class="col-sm-6">
+                                            <label>Title</label>
+                                            <input type="text" class="form-control"
+                                                   data-required="true" id="title" name="title">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Description</label>
+                                            <input type="text" class="form-control"
+                                                   data-required="true" id="desc" name="desc">
+                                            <input type="hidden" name="idService" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group pull-in clearfix">
+
+                                        <div class="col-sm-6">
+                                            <label>Icon</label>
+                                            <div class="input-group m-b">
+                                                <span class="input-group-addon"><a class="fancybox"
+                                                                                   href="#inline"><i
+                                                        class="fa fa-archive"></i></a></span>
+                                                <input type="text" class="form-control"
+                                                       placeholder="Icon Code" id="icon" name="icon"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <div onclick="create_data('service')"><input type="submit"
+                                                                         class="btn btn-success btn-s-xs"
+                                                                         value="Submit"></div>
+                        </footer>
+                    </div>
+                    <div id="service_table">
+                        {% if visibleService %}
+                        <div class="col-sm-6">
+                            <section class="panel">
+                                <header class="panel-heading"><span class="h5">Service Data</span></header>
+                                <table class="table table-striped m-b-none text-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Desc</th>
+                                        <th width="70"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for i in serviceData %}
+                                    <tr id="tr_{{i.seqService}}">
+                                        <td class="titleService">{{i.title}}</td>
+                                        <td class="descService">{{i.desc}}</td>
+                                        <td>
+
+                                            <div class="btn-group"
+                                                 onclick="edit_data('editService',{{i.seqService}})">
+                                                <a href="#" class="dropdown-toggle"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   data-original-title="Edit">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </div>
+                                            &nbsp;
+                                            <div class="btn-group"
+                                                 onclick="delete_data('delService',{{i.seqService}})">
+                                                <a href="#" class="dropdown-toggle"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top" data-original-title="Delete">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="logo_table">
+    {% if visibleLogo %}
+    <div class="col-sm-6">
+        <section class="panel">
+            <header class="panel-heading"><span class="h5">Logo Data</span>
+            </header>
+            <table class="table table-striped m-b-none text-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th width="70"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for i in logoData %}
+                <tr id="tr_{{i.seqLogo}}">
+                    <td class="nameLogo">{{i.nameLogo}}</td>
+                    <td class="titleLogo">{{i.titleLogo}}</td>
+                    <td>
+
+                        <div class="btn-group"
+                             onclick="edit_data('editLogo',{{i.seqLogo}})">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               data-original-title="Edit">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </div>
+                        &nbsp;
+                        <div class="btn-group"
+                             onclick="delete_data('delLogo',{{i.seqLogo}})">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               data-original-title="Delete">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </section>
+    </div>
+    {% endif %}
+</div>
+
+<div id="inline" style="width:800px;display: none;">
+<section class="scrollable wrapper">
+<div>
+<section id="web-application"><h3 class="page-header">Web Application Icons</h3>
+
+<div class="row fontawesome-icon-list">
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-adjust')"><a href="#"><i
+        class="fa fa-adjust"></i> fa-adjust</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-anchor')"><a href="#"><i
+        class="fa fa-anchor"></i> fa-anchor</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-archive')"><a href="http://flatfull.com/themes/icon/archive"><i
+        class="fa fa-archive"></i> fa-archive</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-arrows')"><a href="#"><i
+        class="fa fa-arrows"></i> fa-arrows</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-arrows-h')"><a
+        href="#"><i class="fa fa-arrows-h"></i>
+    fa-arrows-h</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-arrows-v')"><a
+        href="#"><i class="fa fa-arrows-v"></i>
+    fa-arrows-v</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-asterisk')"><a
+        href="#"><i class="fa fa-asterisk"></i>
+    fa-asterisk</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-ban')"><a href="#"><i
+        class="fa fa-ban"></i> fa-ban</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bar-chart-o')"><a
+        href="#"><i class="fa fa-bar-chart-o"></i>
+    fa-bar-chart-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-barcode')"><a href="#"><i
+        class="fa fa-barcode"></i> fa-barcode</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bars')"><a href="#"><i
+        class="fa fa-bars"></i> fa-bars</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-beer')"><a href="#"><i
+        class="fa fa-beer"></i> fa-beer</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bell')"><a href="#"><i
+        class="fa fa-bell"></i> fa-bell</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bell-o')"><a href="#"><i
+        class="fa fa-bell-o"></i> fa-bell-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bolt')"><a href="#"><i
+        class="fa fa-bolt"></i> fa-bolt</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-book')"><a href="#"><i
+        class="fa fa-book"></i> fa-book</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bookmark')"><a
+        href="#"><i class="fa fa-bookmark"></i>
+    fa-bookmark</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bookmark-o')"><a
+        href="#"><i class="fa fa-bookmark-o"></i>
+    fa-bookmark-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-briefcase')"><a href="#"><i
+        class="fa fa-briefcase"></i> fa-briefcase</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-bug')"><a href="#"><i
+        class="fa fa-bug"></i> fa-bug</a></div>
+<div class="fa-hover col-md-4 col-sm-4" onclick="choose('fa fa-building-o')"><a
+        href="#"><i class="fa fa-building-o"></i>
+    fa-building-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/bullhorn"><i class="fa fa-bullhorn"></i>
+    fa-bullhorn</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/bullseye"><i class="fa fa-bullseye"></i>
+    fa-bullseye</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/calendar"><i class="fa fa-calendar"></i>
+    fa-calendar</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/calendar-o"><i class="fa fa-calendar-o"></i>
+    fa-calendar-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/camera"><i
+        class="fa fa-camera"></i> fa-camera</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/camera-retro"><i
+        class="fa fa-camera-retro"></i> fa-camera-retro</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-down"><i
+        class="fa fa-caret-square-o-down"></i> fa-caret-square-o-down</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-left"><i
+        class="fa fa-caret-square-o-left"></i> fa-caret-square-o-left</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-right"><i
+        class="fa fa-caret-square-o-right"></i> fa-caret-square-o-right</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-up"><i
+        class="fa fa-caret-square-o-up"></i> fa-caret-square-o-up</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/certificate"><i class="fa fa-certificate"></i>
+    fa-certificate</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/check"><i
+        class="fa fa-check"></i> fa-check</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/check-circle"><i
+        class="fa fa-check-circle"></i> fa-check-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/check-circle-o"><i
+        class="fa fa-check-circle-o"></i> fa-check-circle-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/check-square"><i
+        class="fa fa-check-square"></i> fa-check-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/check-square-o"><i
+        class="fa fa-check-square-o"></i> fa-check-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/circle"><i
+        class="fa fa-circle"></i> fa-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/circle-o"><i class="fa fa-circle-o"></i>
+    fa-circle-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/clock-o"><i
+        class="fa fa-clock-o"></i> fa-clock-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cloud"><i
+        class="fa fa-cloud"></i> fa-cloud</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/cloud-download"><i
+        class="fa fa-cloud-download"></i> fa-cloud-download</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/cloud-upload"><i
+        class="fa fa-cloud-upload"></i> fa-cloud-upload</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/code"><i
+        class="fa fa-code"></i> fa-code</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/code-fork"><i
+        class="fa fa-code-fork"></i> fa-code-fork</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/coffee"><i
+        class="fa fa-coffee"></i> fa-coffee</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cog"><i
+        class="fa fa-cog"></i> fa-cog</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cogs"><i
+        class="fa fa-cogs"></i> fa-cogs</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/comment"><i
+        class="fa fa-comment"></i> fa-comment</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/comment-o"><i
+        class="fa fa-comment-o"></i> fa-comment-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/comments"><i class="fa fa-comments"></i>
+    fa-comments</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/comments-o"><i class="fa fa-comments-o"></i>
+    fa-comments-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/compass"><i
+        class="fa fa-compass"></i> fa-compass</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/credit-card"><i class="fa fa-credit-card"></i>
+    fa-credit-card</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/crop"><i
+        class="fa fa-crop"></i> fa-crop</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/crosshairs"><i class="fa fa-crosshairs"></i>
+    fa-crosshairs</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cutlery"><i
+        class="fa fa-cutlery"></i> fa-cutlery</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/tachometer"><i class="fa fa-dashboard"></i>
+    fa-dashboard <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/desktop"><i
+        class="fa fa-desktop"></i> fa-desktop</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/dot-circle-o"><i
+        class="fa fa-dot-circle-o"></i> fa-dot-circle-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/download"><i class="fa fa-download"></i>
+    fa-download</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/pencil-square-o"><i class="fa fa-edit"></i>
+    fa-edit <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/ellipsis-h"><i class="fa fa-ellipsis-h"></i>
+    fa-ellipsis-h</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/ellipsis-v"><i class="fa fa-ellipsis-v"></i>
+    fa-ellipsis-v</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/envelope"><i class="fa fa-envelope"></i>
+    fa-envelope</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/envelope-o"><i class="fa fa-envelope-o"></i>
+    fa-envelope-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/eraser"><i
+        class="fa fa-eraser"></i> fa-eraser</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/exchange"><i class="fa fa-exchange"></i>
+    fa-exchange</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/exclamation"><i class="fa fa-exclamation"></i>
+    fa-exclamation</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/exclamation-circle"><i
+        class="fa fa-exclamation-circle"></i> fa-exclamation-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/exclamation-triangle"><i
+        class="fa fa-exclamation-triangle"></i> fa-exclamation-triangle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/external-link"><i
+        class="fa fa-external-link"></i> fa-external-link</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/external-link-square"><i
+        class="fa fa-external-link-square"></i> fa-external-link-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/eye"><i
+        class="fa fa-eye"></i> fa-eye</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/eye-slash"><i
+        class="fa fa-eye-slash"></i> fa-eye-slash</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/female"><i
+        class="fa fa-female"></i> fa-female</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/fighter-jet"><i class="fa fa-fighter-jet"></i>
+    fa-fighter-jet</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/film"><i
+        class="fa fa-film"></i> fa-film</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/filter"><i
+        class="fa fa-filter"></i> fa-filter</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/fire"><i
+        class="fa fa-fire"></i> fa-fire</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/fire-extinguisher"><i
+        class="fa fa-fire-extinguisher"></i> fa-fire-extinguisher</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/flag"><i
+        class="fa fa-flag"></i> fa-flag</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/flag-checkered"><i
+        class="fa fa-flag-checkered"></i> fa-flag-checkered</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/flag-o"><i
+        class="fa fa-flag-o"></i> fa-flag-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/bolt"><i
+        class="fa fa-flash"></i> fa-flash <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/flask"><i
+        class="fa fa-flask"></i> fa-flask</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/folder"><i
+        class="fa fa-folder"></i> fa-folder</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/folder-o"><i class="fa fa-folder-o"></i>
+    fa-folder-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/folder-open"><i class="fa fa-folder-open"></i>
+    fa-folder-open</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/folder-open-o"><i
+        class="fa fa-folder-open-o"></i> fa-folder-open-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/frown-o"><i
+        class="fa fa-frown-o"></i> fa-frown-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/gamepad"><i
+        class="fa fa-gamepad"></i> fa-gamepad</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/gavel"><i
+        class="fa fa-gavel"></i> fa-gavel</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cog"><i
+        class="fa fa-gear"></i> fa-gear <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/cogs"><i
+        class="fa fa-gears"></i> fa-gears <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/gift"><i
+        class="fa fa-gift"></i> fa-gift</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/glass"><i
+        class="fa fa-glass"></i> fa-glass</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/globe"><i
+        class="fa fa-globe"></i> fa-globe</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/users"><i
+        class="fa fa-group"></i> fa-group <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/hdd-o"><i
+        class="fa fa-hdd-o"></i> fa-hdd-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/headphones"><i class="fa fa-headphones"></i>
+    fa-headphones</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/heart"><i
+        class="fa fa-heart"></i> fa-heart</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/heart-o"><i
+        class="fa fa-heart-o"></i> fa-heart-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/home"><i
+        class="fa fa-home"></i> fa-home</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/inbox"><i
+        class="fa fa-inbox"></i> fa-inbox</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/info"><i
+        class="fa fa-info"></i> fa-info</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/info-circle"><i class="fa fa-info-circle"></i>
+    fa-info-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/key"><i
+        class="fa fa-key"></i> fa-key</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/keyboard-o"><i class="fa fa-keyboard-o"></i>
+    fa-keyboard-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/laptop"><i
+        class="fa fa-laptop"></i> fa-laptop</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/leaf"><i
+        class="fa fa-leaf"></i> fa-leaf</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/gavel"><i
+        class="fa fa-legal"></i> fa-legal <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/lemon-o"><i
+        class="fa fa-lemon-o"></i> fa-lemon-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/level-down"><i class="fa fa-level-down"></i>
+    fa-level-down</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/level-up"><i class="fa fa-level-up"></i>
+    fa-level-up</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/lightbulb-o"><i class="fa fa-lightbulb-o"></i>
+    fa-lightbulb-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/location-arrow"><i
+        class="fa fa-location-arrow"></i> fa-location-arrow</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/lock"><i
+        class="fa fa-lock"></i> fa-lock</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/magic"><i
+        class="fa fa-magic"></i> fa-magic</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/magnet"><i
+        class="fa fa-magnet"></i> fa-magnet</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/share"><i
+        class="fa fa-mail-forward"></i> fa-mail-forward <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/reply"><i
+        class="fa fa-mail-reply"></i> fa-mail-reply <span class="text-muted">(alias)</span></a>
+</div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/mail-reply-all"><i
+        class="fa fa-mail-reply-all"></i> fa-mail-reply-all</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/male"><i
+        class="fa fa-male"></i> fa-male</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/map-marker"><i class="fa fa-map-marker"></i>
+    fa-map-marker</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/meh-o"><i
+        class="fa fa-meh-o"></i> fa-meh-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/microphone"><i class="fa fa-microphone"></i>
+    fa-microphone</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/microphone-slash"><i
+        class="fa fa-microphone-slash"></i> fa-microphone-slash</a></div>
+<div class="fa-hover col-md4 col-sm-4"><a href="http://flatfull.com/themes/icon/minus"><i
+        class="fa fa-minus"></i> fa-minus</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/minus-circle"><i
+        class="fa fa-minus-circle"></i> fa-minus-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/minus-square"><i
+        class="fa fa-minus-square"></i> fa-minus-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/minus-square-o"><i
+        class="fa fa-minus-square-o"></i> fa-minus-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/mobile"><i
+        class="fa fa-mobile"></i> fa-mobile</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/mobile"><i
+        class="fa fa-mobile-phone"></i> fa-mobile-phone <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/money"><i
+        class="fa fa-money"></i> fa-money</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/moon-o"><i
+        class="fa fa-moon-o"></i> fa-moon-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/music"><i
+        class="fa fa-music"></i> fa-music</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/pencil"><i
+        class="fa fa-pencil"></i> fa-pencil</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/pencil-square"><i
+        class="fa fa-pencil-square"></i> fa-pencil-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/pencil-square-o"><i
+        class="fa fa-pencil-square-o"></i> fa-pencil-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/phone"><i
+        class="fa fa-phone"></i> fa-phone</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/phone-square"><i
+        class="fa fa-phone-square"></i> fa-phone-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/picture-o"><i
+        class="fa fa-picture-o"></i> fa-picture-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/plane"><i
+        class="fa fa-plane"></i> fa-plane</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/plus"><i
+        class="fa fa-plus"></i> fa-plus</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/plus-circle"><i class="fa fa-plus-circle"></i>
+    fa-plus-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/plus-square"><i class="fa fa-plus-square"></i>
+    fa-plus-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/plus-square-o"><i
+        class="fa fa-plus-square-o"></i> fa-plus-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/power-off"><i
+        class="fa fa-power-off"></i> fa-power-off</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/print"><i
+        class="fa fa-print"></i> fa-print</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/puzzle-piece"><i
+        class="fa fa-puzzle-piece"></i> fa-puzzle-piece</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/qrcode"><i
+        class="fa fa-qrcode"></i> fa-qrcode</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/question"><i class="fa fa-question"></i>
+    fa-question</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/question-circle"><i
+        class="fa fa-question-circle"></i> fa-question-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/quote-left"><i class="fa fa-quote-left"></i>
+    fa-quote-left</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/quote-right"><i class="fa fa-quote-right"></i>
+    fa-quote-right</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/random"><i
+        class="fa fa-random"></i> fa-random</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/refresh"><i
+        class="fa fa-refresh"></i> fa-refresh</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/reply"><i
+        class="fa fa-reply"></i> fa-reply</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/reply-all"><i
+        class="fa fa-reply-all"></i> fa-reply-all</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/retweet"><i
+        class="fa fa-retweet"></i> fa-retweet</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/road"><i
+        class="fa fa-road"></i> fa-road</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/rocket"><i
+        class="fa fa-rocket"></i> fa-rocket</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/rss"><i
+        class="fa fa-rss"></i> fa-rss</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/rss-square"><i class="fa fa-rss-square"></i>
+    fa-rss-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/search"><i
+        class="fa fa-search"></i> fa-search</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/search-minus"><i
+        class="fa fa-search-minus"></i> fa-search-minus</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/search-plus"><i class="fa fa-search-plus"></i>
+    fa-search-plus</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/share"><i
+        class="fa fa-share"></i> fa-share</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/share-square"><i
+        class="fa fa-share-square"></i> fa-share-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/share-square-o"><i
+        class="fa fa-share-square-o"></i> fa-share-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/shield"><i
+        class="fa fa-shield"></i> fa-shield</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/shopping-cart"><i
+        class="fa fa-shopping-cart"></i> fa-shopping-cart</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sign-in"><i
+        class="fa fa-sign-in"></i> fa-sign-in</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sign-out"><i class="fa fa-sign-out"></i>
+    fa-sign-out</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/signal"><i
+        class="fa fa-signal"></i> fa-signal</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sitemap"><i
+        class="fa fa-sitemap"></i> fa-sitemap</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/smile-o"><i
+        class="fa fa-smile-o"></i> fa-smile-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sort"><i
+        class="fa fa-sort"></i> fa-sort</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-alpha-asc"><i
+        class="fa fa-sort-alpha-asc"></i> fa-sort-alpha-asc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-alpha-desc"><i
+        class="fa fa-sort-alpha-desc"></i> fa-sort-alpha-desc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-amount-asc"><i
+        class="fa fa-sort-amount-asc"></i> fa-sort-amount-asc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-amount-desc"><i
+        class="fa fa-sort-amount-desc"></i> fa-sort-amount-desc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-asc"><i class="fa fa-sort-asc"></i>
+    fa-sort-asc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sort-desc"><i
+        class="fa fa-sort-desc"></i> fa-sort-desc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-asc"><i class="fa fa-sort-down"></i>
+    fa-sort-down <span class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-numeric-asc"><i
+        class="fa fa-sort-numeric-asc"></i> fa-sort-numeric-asc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/sort-numeric-desc"><i
+        class="fa fa-sort-numeric-desc"></i> fa-sort-numeric-desc</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sort-desc"><i
+        class="fa fa-sort-up"></i> fa-sort-up <span class="text-muted">(alias)</span></a>
+</div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/spinner"><i
+        class="fa fa-spinner"></i> fa-spinner</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/square"><i
+        class="fa fa-square"></i> fa-square</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/square-o"><i class="fa fa-square-o"></i>
+    fa-square-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/star"><i
+        class="fa fa-star"></i> fa-star</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/star-half"><i
+        class="fa fa-star-half"></i> fa-star-half</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/star-half-o"><i
+        class="fa fa-star-half-empty"></i> fa-star-half-empty <span class="text-muted">(alias)</span></a>
+</div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/star-half-o"><i
+        class="fa fa-star-half-full"></i> fa-star-half-full <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/star-half-o"><i class="fa fa-star-half-o"></i>
+    fa-star-half-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/star-o"><i
+        class="fa fa-star-o"></i> fa-star-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/subscript"><i
+        class="fa fa-subscript"></i> fa-subscript</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/suitcase"><i class="fa fa-suitcase"></i>
+    fa-suitcase</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sun-o"><i
+        class="fa fa-sun-o"></i> fa-sun-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/superscript"><i class="fa fa-superscript"></i>
+    fa-superscript</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/tablet"><i
+        class="fa fa-tablet"></i> fa-tablet</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/tachometer"><i class="fa fa-tachometer"></i>
+    fa-tachometer</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/tag"><i
+        class="fa fa-tag"></i> fa-tag</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/tags"><i
+        class="fa fa-tags"></i> fa-tags</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/tasks"><i
+        class="fa fa-tasks"></i> fa-tasks</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/terminal"><i class="fa fa-terminal"></i>
+    fa-terminal</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/thumb-tack"><i class="fa fa-thumb-tack"></i>
+    fa-thumb-tack</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/thumbs-down"><i class="fa fa-thumbs-down"></i>
+    fa-thumbs-down</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/thumbs-o-down"><i
+        class="fa fa-thumbs-o-down"></i> fa-thumbs-o-down</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/thumbs-o-up"><i class="fa fa-thumbs-o-up"></i>
+    fa-thumbs-o-up</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/thumbs-up"><i
+        class="fa fa-thumbs-up"></i> fa-thumbs-up</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/ticket"><i
+        class="fa fa-ticket"></i> fa-ticket</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/times"><i
+        class="fa fa-times"></i> fa-times</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/times-circle"><i
+        class="fa fa-times-circle"></i> fa-times-circle</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/times-circle-o"><i
+        class="fa fa-times-circle-o"></i> fa-times-circle-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/tint"><i
+        class="fa fa-tint"></i> fa-tint</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-down"><i
+        class="fa fa-toggle-down"></i> fa-toggle-down <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-left"><i
+        class="fa fa-toggle-left"></i> fa-toggle-left <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-right"><i
+        class="fa fa-toggle-right"></i> fa-toggle-right <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/caret-square-o-up"><i
+        class="fa fa-toggle-up"></i> fa-toggle-up <span
+        class="text-muted">(alias)</span></a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/trash-o"><i
+        class="fa fa-trash-o"></i> fa-trash-o</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/trophy"><i
+        class="fa fa-trophy"></i> fa-trophy</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/truck"><i
+        class="fa fa-truck"></i> fa-truck</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/umbrella"><i class="fa fa-umbrella"></i>
+    fa-umbrella</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/unlock"><i
+        class="fa fa-unlock"></i> fa-unlock</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/unlock-alt"><i class="fa fa-unlock-alt"></i>
+    fa-unlock-alt</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/sort"><i
+        class="fa fa-unsorted"></i> fa-unsorted <span class="text-muted">(alias)</span></a>
+</div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/upload"><i
+        class="fa fa-upload"></i> fa-upload</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/user"><i
+        class="fa fa-user"></i> fa-user</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/users"><i
+        class="fa fa-users"></i> fa-users</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/video-camera"><i
+        class="fa fa-video-camera"></i> fa-video-camera</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/volume-down"><i class="fa fa-volume-down"></i>
+    fa-volume-down</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/volume-off"><i class="fa fa-volume-off"></i>
+    fa-volume-off</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/volume-up"><i
+        class="fa fa-volume-up"></i> fa-volume-up</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/exclamation-triangle"><i
+        class="fa fa-warning"></i> fa-warning <span class="text-muted">(alias)</span></a>
+</div>
+<div class="fa-hover col-md-4 col-sm-4"><a
+        href="http://flatfull.com/themes/icon/wheelchair"><i class="fa fa-wheelchair"></i>
+    fa-wheelchair</a></div>
+<div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/wrench"><i
+        class="fa fa-wrench"></i> fa-wrench</a></div>
+</div>
+</section>
+<section id="form-control"><h4 class="page-header">Form Control Icons</h4>
+
+    <div class="row fontawesome-icon-list">
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/check-square"><i
+                class="fa fa-check-square"></i> fa-check-square</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/check-square-o"><i
+                class="fa fa-check-square-o"></i> fa-check-square-o</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/circle"><i
+                class="fa fa-circle"></i> fa-circle</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/circle-o"><i class="fa fa-circle-o"></i>
+            fa-circle-o</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/dot-circle-o"><i
+                class="fa fa-dot-circle-o"></i> fa-dot-circle-o</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/minus-square"><i
+                class="fa fa-minus-square"></i> fa-minus-square</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/minus-square-o"><i
+                class="fa fa-minus-square-o"></i> fa-minus-square-o</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/plus-square"><i class="fa fa-plus-square"></i>
+            fa-plus-square</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/plus-square-o"><i
+                class="fa fa-plus-square-o"></i> fa-plus-square-o</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a href="http://flatfull.com/themes/icon/square"><i
+                class="fa fa-square"></i> fa-square</a></div>
+        <div class="fa-hover col-md-4 col-sm-4"><a
+                href="http://flatfull.com/themes/icon/square-o"><i class="fa fa-square-o"></i>
+            fa-square-o</a></div>
+    </div>
+</section>
+</div>
+</section>
+</div>
+<!-- ==============================================
+SERVICES
+=============================================== -->
+<body data-spy="scroll" data-target="#main-nav" data-offset="200">
+<section id="services">
+
+    <div class="container">
+
+        <h1 class="section-title scrollimation scale-in">The <span>Services</span> I offer<i
+                class="icon-wrench"></i></h1>
+
+        <div class="row services scrollimation fade-left">
+            <div class="col-md-3 text-center">
+                <a href="#fake" class="icon"><i class="fa fa-fire"></i></a>
+
+                <h2>Hard Worker</h2>
+            </div>
+            <div class="col-md-3 details">
+                <p>Hard work for something is my passion. I have never stop working if my job
+                    unfinished. </br >"Don't stop if it's unfinished"</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <a href="#" class="icon"><i class="fa fa-code"></i></a>
+
+                <h2>Development</h2>
+            </div>
+            <div class="col-md-3 details">
+                <p>I have skill in development an application, that using PHP, Python, Javascript,
+                    MySQL. Operating system used is Linux and Windows. </br>Graphic software used is
+                    Macromedia Flash and Adobe Photoshop. </br>"Expertise is not adrift of age"</p>
+            </div>
+
+        </div>
+        <!--End row (top) -->
+
+        <div class="row lines visible-md visible-lg">
+            <div class="col-md-3"><span class="spot"></span></div>
+            <div class="col-md-3"><span class="spot"></span></div>
+            <div class="col-md-3"><span class="spot"></span></div>
+            <div class="col-md-3"><span class="spot"></span></div>
+        </div>
+        <!--End row -->
+
+        <div class="row services bottom-row scrollimation fade-right">
+            <div class="col-md-3 text-center col-md-push-3">
+                <h2>Design</h2>
+                <a href="#" class="icon"><i class="fa fa-pencil"></i></a>
+            </div>
+            <div class="col-md-3 details col-md-pull-3">
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus
+                    commodo.Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus
+                    ac
+                    cursus commodo.</p>
+            </div>
+            <div class="col-md-3 text-center  col-md-push-3">
+                <h2>Rocket Science</h2>
+                <a href="#" class="icon"><i class="fa fa-rocket"></i></a>
+            </div>
+            <div class="col-md-3 details  col-md-pull-3">
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus
+                    commodo.Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus
+                    ac
+                    cursus commodo.</p>
+            </div>
+        </div>
+        <!--End row (bottom)-->
+
+    </div>
+    <!--End container -->
+
+</section>
+</body>
+<!--End services section-->
+</section>
+</div>
+</section>
+</section>
+</section>
+
+</section>
+<!-- /.vbox -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/app.v2.js"></script>
+<script src="{{ MEDIA_URL }}assets-panel2/js/fuelux/fuelux.js"></script>
+<!-- select2 -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/select2/select2.min.js" cache="false"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="{{ MEDIA_URL }}js/ui-tabs-accordions.js"></script>
+
+
+<!-- Add jQuery library -->
+<script type="text/javascript" src="{{ MEDIA_URL }}assets-panel2/js/fancybox/lib/jquery-1.10.1.min.js"></script>
+
+<!-- Add fancyBox main JS and CSS files -->
+<script type="text/javascript" src="{{ MEDIA_URL }}assets-panel2/js/fancybox/source/jquery.fancybox.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+            $('.fancybox').fancybox();
+        });
+</script>
+
+</body>
+</html>

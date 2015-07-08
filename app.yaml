@@ -1,0 +1,23 @@
+application: t-portfolio
+version: 1
+runtime: python
+api_version: 1
+
+inbound_services:
+- channel_presence
+
+handlers:
+- url: /_ah/queue/deferred
+  script: djangoappengine/deferred/handler.py
+  login: admin
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /media
+  static_dir: media/
+  expiration: '0'
+
+- url: /.*
+  script: djangoappengine/main/main.py

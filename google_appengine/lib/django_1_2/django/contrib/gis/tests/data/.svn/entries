@@ -1,0 +1,80 @@
+10
+
+dir
+348
+svn+ssh://synl0rd@void-labs.org/home/synl0rd/secretproject/gicat2012/src/google_appengine/lib/django_1_2/django/contrib/gis/tests/data
+svn+ssh://synl0rd@void-labs.org/home/synl0rd/secretproject
+
+
+
+2011-09-27T15:49:57.164687Z
+348
+synl0rd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+66a8c79e-b3c6-4db3-9272-7d990b408b9e
+
+cities
+dir
+
+test_poly
+dir
+
+interstates
+dir
+
+test_point
+dir
+
+counties
+dir
+
+geometries.json.gz
+file
+
+
+
+
+2011-09-27T13:04:03.899605Z
+ab513fb9f469315b2a3ab3098d970453
+2011-09-27T15:49:57.164687Z
+348
+synl0rd
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9100
+
+test_vrt
+dir
+

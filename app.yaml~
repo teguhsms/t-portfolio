@@ -1,0 +1,23 @@
+application: t-portfolio
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+inbound_services:
+- channel_presence
+
+handlers:
+- url: /.*
+  script: t-portfolio.application
+  login: admin
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /media
+  static_dir: media/
+  expiration: '0'
+
+

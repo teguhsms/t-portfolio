@@ -1,0 +1,43 @@
+{% if visibleLogo %}
+<div class="col-sm-6">
+    <section class="panel">
+        <header class="panel-heading">Logo</header>
+        <table class="table table-striped m-b-none text-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th width="70"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for i in logoData %}
+            <tr id="tr_{{i.sequence}}">
+                <td class="nameLogo">{{i.name}}</td>
+                <td class="titleLogo">{{i.title}}</td>
+                <td>
+
+                    <div class="btn-group" onclick="edit_data('edit',{{i.sequence}})">
+                        <a href="#" class="dropdown-toggle" data-toggle="tooltip"
+                           data-placement="top"
+                           data-original-title="Edit">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>
+                    &nbsp;
+                    <div class="btn-group" onclick="delete_data('delete',{{i.sequence}})">
+                        <a href="#" class="dropdown-toggle" data-toggle="tooltip"
+                           data-placement="top" data-original-title="Delete">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endif %}

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Web Application | todo</title>
+    <meta name="description"
+          content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/app.v2.css" type="text/css"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}assets-panel2/css/font.css" type="text/css" cache="false"/>
+    <!--[if lt IE 9]>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/respond.min.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/html5.js" cache="false"></script>
+    <script src="{{ MEDIA_URL }}assets-panel2/js/ie/fix.js" cache="false"></script> <![endif]-->
+
+
+
+    <!-- ==============================================
+    Fonts
+    =============================================== -->
+    <link href="{{ MEDIA_URL }}css/cssb828.css?family=Lato:400,300,300italic,400italic,700,700italic,900"
+          rel='stylesheet' type='text/css'>
+
+
+    <script type="text/javascript">
+            /* create function */
+            function create_data(type){
+                /* statement for create logo */
+                var name = $('input[name=name]').val();
+                var title = $('input[name=title]').val();
+                var idLogo = $('input[name=idLogo]').val();
+                if (type == 'logo'){
+                    if (idLogo == ''){
+                        idLogo = 'insert data'
+                    }
+                    if (name == ''){
+                        alert("Please fill name");
+                        document.getElementById("name").focus();
+                        return
+                    } if (title == ''){
+                        alert("Plase fill title");
+                        document.getElementById("title").focus();
+                        return
+                    }
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '{% url logo %}',
+                        data: {
+                            'action': type,
+                            'name': name,
+                            'title': title,
+                            'id': idLogo,
+                            'csrfmiddlewaretoken':'{{csrf_token}}'
+                        },
+                        success:function(response){
+                            alert(response.alert);
+                            $('input[name=name]').val('');
+                            $('input[name=title]').val('');
+                            window.location = '{% url header %}'
+                        }
+                    });
+                }
+                /* statement for create skill */
+                var skill = $('input[name=skill]').val();
+                var idSkill = $('input[name=idSkill]').val();
+                if (type == 'skill') {
+                    if (skill == ''){
+                        alert("Please fill your skill");
+                        document.getElementById("skill").focus();
+                        return
+                    }
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '{% url skill %}',
+                        data: {
+                            'action': type,
+                            'skill': skill,
+                            'id': idSkill,
+                            'csrfmiddlewaretoken':'{{csrf_token}}'
+                        },
+                        success:function(response){
+                            alert(response['alert']);
+                            $('input[name=skill]').val('');
+                            window.location = '{% url header %}'
+                        }
+                    });
+                }
+            }
+
+            /* edit function */
+            function edit_data(type,id){
+                /* statement for edit Logo */
+                var name = $('#tr_'+ id +' .nameLogo').text();
+                var title = $('#tr_'+ id +' .titleLogo').text();
+                if (type == 'editLogo') {
+                    $('input[name=name]').val(name);
+                    $('input[name=title]').val(title);
+                    $('input[name=idLogo]').val(id);
+                }
+                /* statement for edit Skill */
+                var skill = $('#tr_'+ id +' .nameSkill').text();
+                if (type == 'editSkill') {
+                    $('input[name=skill]').val(skill);
+                    $('input[name=idSkill]').val(id);
+                }
+            }
+
+            /* delete function */
+            function delete_data(type,id){
+                /* statement for delete Logo */
+                if (type == 'delLogo') {
+                    $.ajax({
+                        type:"POST",
+                        cache: false,
+                        url: '{% url logo %}',
+                        data: {
+                            'action': type,
+                            'id': id,
+                            'csrfmiddlewaretoken':'{{csrf_token}}'
+                        },
+                        success:function(response){
+                            alert('Delete Success!!!');
+                            $('#logo_table').html(response);
+                        }
+
+                    });
+                }
+                /* statement for delete Skill */
+                if (type == 'delSkill') {
+                    $.ajax({
+                        type:"POST",
+                        cache: false,
+                        url: '{% url skill %}',
+                        data: {
+                            'action': type,
+                            'id': id,
+                            'csrfmiddlewaretoken':'{{csrf_token}}'
+                        },
+                        success:function(response){
+                            alert('Delete Success!!!');
+                            $('#skill_table').html(response);
+                        }
+
+                    });
+                }
+
+            }
+
+    </script>
+</head>
+<body>
+<section class="hbox stretch"> <!-- .aside -->
+<aside class="bg-dark aside-sm" id="nav">
+    <section class="vbox">
+        <header class="dker nav-bar">
+            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a href="#" class="nav-brand" data-toggle="fullscreen">Admin Panel</a>
+            <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                <i class="fa fa-comment-o"></i>
+            </a>
+        </header>
+        <section>
+            <div class="lter nav-user hidden-xs pos-rlt">
+                <div class="nav-avatar pos-rlt"><a href="#" class="thumb-sm avatar animated rollIn"
+                                                   data-toggle="dropdown"> <img
+                        src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt=""
+                        class=""> <span
+                        class="caret caret-white"></span> </a>
+                    <ul class="dropdown-menu m-t-sm animated fadeInLeft"><span class="arrow top"></span>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#"> <span class="badge bg-danger pull-right">3</span> Notifications </a></li>
+                        <li class="divider"></li>
+                        <li><a href="docs.html">Help</a></li>
+                        <li><a href='{% url logout %}'>Logout</a></li>
+                    </ul>
+                    <div class="visible-xs m-t m-b"><a href="#" class="h3">John.Smith</a>
+
+                        <p><i class="fa fa-map-marker"></i> London, UK</p></div>
+                </div>
+                <div class="nav-msg"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <b
+                        class="badge badge-white count-n">2</b> </a>
+                    <section class="dropdown-menu m-l-sm pull-left animated fadeInRight">
+                        <div class="arrow left"></div>
+                        <section class="panel bg-white">
+                            <header class="panel-heading"><strong>You have <span class="count-n">2</span>
+                                notifications</strong></header>
+                            <div class="list-group"><a href="#" class="media list-group-item"> <span
+                                    class="pull-left thumb-sm"> <img
+                                    src="{{ MEDIA_URL }}assets-panel2/images/avatar.jpg" alt="John said"
+                                    class="img-circle"> </span> <span
+                                    class="media-body block m-b-none"> Use awesome animate.css<br> <small
+                                    class="text-muted">28 Aug 13
+                            </small> </span> </a> <a href="#" class="media list-group-item"> <span
+                                    class="media-body block m-b-none"> 1.0 initial released<br> <small
+                                    class="text-muted">27 Aug 13
+                            </small> </span> </a></div>
+                            <footer class="panel-footer text-sm"><a href="#" class="pull-right"><i
+                                    class="fa fa-cog"></i></a> <a href="#">See all the notifications</a></footer>
+                        </section>
+                    </section>
+                </div>
+            </div>
+            <nav class="nav-primary hidden-xs">
+                <ul class="nav">
+                    <li><a href="{% url index2 %}"> <i class="fa fa-eye"></i> <span>Discover</span> </a></li>
+                    <li class="dropdown-submenu active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-flask"></i> <span>UI kit</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="buttons.html">Buttons</a></li>
+                            <li><a href="{% url icons %}"> <b class="badge pull-right">302</b>Icons </a></li>
+                            <li><a href="grid.html">Grid</a></li>
+                            <li><a href="widgets.html"> <b class="badge bg-primary pull-right">8</b>Widgets </a>
+                            </li>
+                            <li><a href="components.html"> <b class="badge pull-right">18</b>Components </a></li>
+                            <li><a href="list.html">List groups</a></li>
+                            <li><a href="table.html">Table</a></li>
+                            <li><a href="form.html">Form</a></li>
+                            <li><a href="chart.html">Chart</a></li>
+                            <li><a href="calendar.html">Fullcalendar</a></li>
+                            <li><a href="portlet.html">Portlet</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+                            class="fa fa-file-text"></i> <span>Pages</span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url header %}">Header</a></li>
+                            <li><a href="{% url services %}">Services</a></li>
+                            <li><a href="{% url about %}">About</a></li>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="dashboard-1.html">Dashboard one</a></li>
+                            <li><a href="dashboard-2.html">Dashboard layout</a></li>
+                            <li><a href="analysis.html">Analysis</a></li>
+                            <li><a href="master.html">Master</a></li>
+                            <li><a href="maps.html">Maps</a></li>
+                            <li><a href="gallery.html">Gallery</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="invoice.html">Invoice</a></li>
+                            <li><a href="signin.html">Signin page</a></li>
+                            <li><a href="signup.html">Signup page</a></li>
+                            <li><a href="404.html">404 page</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="mail.html"> <b class="badge bg-primary pull-right">3</b> <i
+                            class="fa fa-envelope-o"></i> <span>Mail</span> </a></li>
+                    <li><a href="tasks.html"> <i class="fa fa-tasks"></i> <span>Tasks</span> </a></li>
+                    <li><a href="notes.html"> <i class="fa fa-pencil"></i> <span>Notes</span> </a></li>
+                    <li><a href="timeline.html"> <i class="fa fa-clock-o"></i> <span>Timeline</span> </a></li>
+                </ul>
+            </nav>
+        </section>
+        <footer class="footer bg-gradient hidden-xs"><a href="{% url lockme %}" data-toggle="ajaxModal"
+                                                        class="btn btn-sm btn-link m-r-n-xs pull-right"> <i
+                class="fa fa-power-off"></i> </a> <a href="#nav" data-toggle="class:nav-vertical"
+                                                     class="btn btn-sm btn-link m-l-n-sm"> <i
+                class="fa fa-bars"></i> </a></footer>
+    </section>
+</aside>
+<!-- /.aside --> <!-- .vbox -->
+<section id="content">
+    <section class="vbox">
+        <header class="header bg-dark bg-gradient">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#logo" data-toggle="tab">Header</a></li>
+                <li class=""><a href="#validation" data-toggle="tab">Validation</a></li>
+            </ul>
+        </header>
+        <section class="scrollable wrapper">
+            <div class="tab-content">
+                <section class="tab-pane active" id="logo">
+                    <!-- Logo Information -->
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                   class="accordion-toggle">
+                                    <i class="fa fa-bars"></i>
+                                    &nbsp; Main Navigation for Logo
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div data-validate="parsley">
+                                            <section class="panel">
+                                                <header class="panel-heading"><span class="h5">Logo Information</span></header>
+                                                <div class="panel-body">
+
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-6">
+                                                            <label>Name</label>
+                                                            <input type="text" class="form-control" data-required="true"
+                                                                   id="name" name="name">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label>Title</label>
+                                                            <input type="text" class="form-control" data-required="true"
+                                                                   id="title" name="title">
+                                                            <input type="hidden" name="idLogo" value=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <footer class="panel-footer text-right bg-light lter">
+                                                    <div onclick="create_data('logo')"><input type="submit"
+                                                                                                class="btn btn-success btn-s-xs"
+                                                                                                value="Submit"></div>
+                                                </footer>
+                                            </section>
+                                        </div>
+                                    </div>
+
+
+                                    <div id="logo_table">
+                                        {% if visibleLogo %}
+                                        <div class="col-sm-6">
+                                            <section class="panel">
+                                                <header class="panel-heading"><span class="h5">Logo Data</span></header>
+                                                <table class="table table-striped m-b-none text-sm">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Title</th>
+                                                        <th width="70"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for i in logoData %}
+                                                    <tr id="tr_{{i.seqLogo}}">
+                                                        <td class="nameLogo">{{i.nameLogo}}</td>
+                                                        <td class="titleLogo">{{i.titleLogo}}</td>
+                                                        <td>
+
+                                                            <div class="btn-group"
+                                                                 onclick="edit_data('editLogo',{{i.seqLogo}})">
+                                                                <a href="#" class="dropdown-toggle"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top"
+                                                                   data-original-title="Edit">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>
+                                                            </div>
+                                                            &nbsp;
+                                                            <div class="btn-group"
+                                                                 onclick="delete_data('delLogo',{{i.seqLogo}})">
+                                                                <a href="#" class="dropdown-toggle"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top" data-original-title="Delete">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </section>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Header Skill Information -->
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                                   class="accordion-toggle">
+                                    <i class="fa fa-bars"></i>
+                                    &nbsp; Main Navigation for Header Skill
+                                </a>
+                            </h5>
+                        </div>
+
+                        <div id="collapseTwo" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div data-validate="parsley">
+                                            <section class="panel">
+                                                <header class="panel-heading"><span class="h5">Header Skill Information</span></header>
+                                                <div class="panel-body">
+
+                                                    <div class="form-group pull-in clearfix">
+                                                        <div class="col-sm-8">
+                                                            <div class="form-group">
+                                                                <input type="text" id="skill" name="skill" class="form-control"
+                                                                       placeholder="Enter skill" data-required="true">
+                                                                <input type="hidden" name="idSkill" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div onclick="create_data('skill')"><input type="submit"
+                                                                                                class="btn btn-success btn-s-xs"
+                                                                                                value="Submit"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+
+                                    <div id="skill_table">
+                                        {% if visibleSkill %}
+                                        <div class="col-sm-6">
+                                            <section class="panel">
+                                                <header class="panel-heading"><span class="h5">Skill Data</span></header>
+                                                <table class="table table-striped m-b-none text-sm">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Skill</th>
+                                                        <th width="70"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for i in skillData %}
+                                                    <tr id="tr_{{i.seqSkill}}">
+                                                        <td class="nameSkill">{{i.nameSkill}}</td>
+                                                        <td>
+
+                                                            <div class="btn-group"
+                                                                 onclick="edit_data('editSkill',{{i.seqSkill}})">
+                                                                <a href="#" class="dropdown-toggle"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top"
+                                                                   data-original-title="Edit">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>
+                                                            </div>
+                                                            &nbsp;
+                                                            <div class="btn-group"
+                                                                 onclick="delete_data('delSkill',{{i.seqSkill}})">
+                                                                <a href="#" class="dropdown-toggle"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top" data-original-title="Delete">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </section>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+                                   class="accordion-toggle">
+                                    <i class="fa fa-bars"></i>
+                                    &nbsp; Main Navigation for Header Page
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <form class="form-inline" role="form">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="exampleInputEmail2">Email
+                                            address</label> <input type="email" class="form-control"
+                                                                   id="exampleInputEmail2"
+                                                                   placeholder="Enter email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only"
+                                               for="exampleInputPassword2">Password</label> <input
+                                            type="password" class="form-control" id="exampleInputPassword2"
+                                            placeholder="Password">
+                                    </div>
+                                    <div class="checkbox m-l-xs m-r-xs"><label> <input type="checkbox"> Remember me
+                                    </label></div>
+                                    <button type="submit" class="btn btn-default">Sign in</button>
+                                    <a href="#modal-form" class="btn btn-success" data-toggle="modal">Form in a
+                                        modal</a></form>
+                            </div>
+                        </div>
+                    </section>
+                    <!--<section class="panel">
+                        <header class="panel-heading font-bold"> Inline form</header>
+                        <div class="panel-body">
+                            <form class="form-inline" role="form">
+                                <div class="form-group"><label class="sr-only" for="exampleInputEmail2">Email
+                                    address</label> <input type="email" class="form-control" id="exampleInputEmail2"
+                                                           placeholder="Enter email"></div>
+                                <div class="form-group"><label class="sr-only"
+                                                               for="exampleInputPassword2">Password</label> <input
+                                        type="password" class="form-control" id="exampleInputPassword2"
+                                        placeholder="Password"></div>
+                                <div class="checkbox m-l-xs m-r-xs"><label> <input type="checkbox"> Remember me
+                                </label></div>
+                                <button type="submit" class="btn btn-default">Sign in</button>
+                                <a href="#modal-form" class="btn btn-success" data-toggle="modal">Form in a
+                                    modal</a></form>
+                        </div>
+                    </section>-->
+                </section>
+
+            </div>
+
+
+
+
+
+
+        </section>
+    </section>
+
+</section>
+</section>
+<!-- /.vbox -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/app.v2.js"></script>
+<!-- jquery -->
+<script src="{{ MEDIA_URL }}assets-panel/js/jquery.js"></script>
+<!-- parsley -->
+<script src="{{ MEDIA_URL }}assets-panel2/js/parsley/parsley.min.js" cache="false"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="{{ MEDIA_URL }}js/ui-tabs-accordions.js"></script>
+
+
+</body>
+</html>

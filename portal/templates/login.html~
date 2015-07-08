@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio - Login</title>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/style-login.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/font-login.css">
+    <script type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="container">
+    <div id="login">
+
+
+        <form>
+
+          <fieldset class="clearfix">
+              <p><span class="fontawesome-user"></span><input type="text" name="username" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Username" -->
+              <p><span class="fontawesome-lock"></span><input type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Password" -->
+              <p><input type="submit" name="submit" value="Sign In"/></div></p>
+                  <!-- <button onclick="create('submit')" type="submit" class="btn btn-primary" name="signup" >Sign up</button> -->
+
+          </fieldset>
+
+        </form>
+
+        <p>Not a member? <a href="{% url register %}">Sign up now</a><span class="fontawesome-arrow-right"></span></p>
+
+      </div> <!-- end login -->
+
+    </div>
+
+
+</body>
+
+</html>

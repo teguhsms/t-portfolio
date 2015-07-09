@@ -31,6 +31,9 @@
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}assets-admin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}assets-admin/js/bootstrap-datetimepicker/css/datetimepicker.css" />
 
+    <!-- icheck -->
+    <link href="{{ MEDIA_URL }}assets-admin/js/iCheck/skins/flat/green.css" rel="stylesheet">
+
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]>
     <script src="{{ MEDIA_URL }}assets-admin/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -56,24 +59,11 @@
             var website = $('input[name=website]').val();
             var desc = $('textarea#cdesc').val();
             var idAbout = $('input[name=idAbout]').val();
-            if (name==''){
-                return
-            } if (pob == ''){
-                return
-            } if (profession == ''){
-                return
-            } if (interests == ''){
-                return
-            } if (residence == ''){
-                return
-            } if (phone == ''){
-                return
-            } if (email == ''){
-                return
-            } if (website == ''){
-                return
-            } if (desc == ''){
-                return
+            var list_var = [name,pob,profession,interests,residence,phone,email,website,desc]
+            for (i=0; i < list_var.length; i++){
+                if (list_var[i]==''){
+                    return
+                }
             } if (idAbout == ''){
                 idAbout = 'insert data'
             }
@@ -102,6 +92,21 @@
                 }
             });
         }
+        function radio(id){
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '{% url about %}',
+                data: {
+                    'action': 'check',
+                    'id': id,
+                    'csrfmiddlewaretoken':'{{csrf_token}}'},
+                success:function(response){
+                    alert(response.alert);
+
+                }
+            });
+        }
         /* edit function */
         function edit_data(type,id){
             /* statement for edit About */
@@ -118,24 +123,24 @@
 
         }
         /* delete function */
-            function delete_data(type,id){
-                /* statement for delete About */
-                $.ajax({
-                    type:"POST",
-                    cache: false,
-                    url: '{% url about %}',
-                    data: {
-                        'action': type,
-                        'id': id,
-                        'csrfmiddlewaretoken':'{{csrf_token}}'
-                    },
-                    success:function(response){
-                        alert('Delete Success!!!');
-                        window.location = '{% url about %}'
-                    }
+        function delete_data(type,id){
+            /* statement for delete About */
+            $.ajax({
+                type:"POST",
+                cache: false,
+                url: '{% url about %}',
+                data: {
+                    'action': type,
+                    'id': id,
+                    'csrfmiddlewaretoken':'{{csrf_token}}'
+                },
+                success:function(response){
+                    alert(response.alert);
+                    window.location = '{% url about %}'
+                }
 
-                });
-            }
+            });
+        }
 
     </script>
 </head>
@@ -394,6 +399,7 @@
                         <span>Portfolio</span>
                     </a>
                     <ul class="sub">
+                        <li><a href="{% url header %}">Header</a></li>
                         <li class="active"><a href="{% url about %}">About</a></li>
                         <li><a href="{% url skill %}">Skill</a></li>
                         <li><a href="">Experience</a></li>
@@ -526,7 +532,7 @@
                 <div class="col-lg-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            Form validations
+                            Form About
                             <span class="tools pull-right">
                                 <a class="fa fa-chevron-down" href="javascript:;"></a>
                              </span>
@@ -663,21 +669,22 @@
                          </span>
                         </header>
                         <div class="panel-body" style="display: none;">
-                            <table class="table  table-hover general-table">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Date of Birth</th>
-                                    <th>Profession</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% if aboutData %}
-                                    {% for i in aboutData %}
-                                    <tr id="tr_{{i.seqAbout}}">
+                            <form id="form_about">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date of Birth</th>
+                                        <th>Profession</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if about_data %}
+                                    {% for i in about_data %}
+                                    <tr id="tr_{{i.seq_about}}">
                                         <td id="name">{{i.name}}</td>
                                         <td id="dob">{{i.dob|date:"Y-m-d" }}</td>
                                         <td id="profession">{{i.profession}}</td>
@@ -689,8 +696,19 @@
                                         <td id="website" style="display: none">{{i.website}}</td>
                                         <td id="desc" style="display: none">{{i.desc}}</td>
                                         <td>
+                                            <div class="btn-group">
+                                                <a class="dropdown-toggle tooltips"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top" data-original-title="active">
+                                                    <input onclick="radio({{i.seq_about}})" type="radio" name="active"
+                                                           value="{{i.seq_about}}" {% if datalookup.seq_about == i.seq_about %}checked{% endif %} />
+
+
+                                                    <div style="display: none">{{i.active}}</div>
+                                                </a>
+                                            </div>
                                             <div class="btn-group"
-                                                 onclick="edit_data('editAbout',{{i.seqAbout}})">
+                                                 onclick="edit_data('editAbout',{{i.seq_about}})">
                                                 <a href="#" class="dropdown-toggle tooltips"
                                                    data-toggle="tooltip"
                                                    data-placement="top"
@@ -700,7 +718,7 @@
                                             </div>
                                             &nbsp;
                                             <div class="btn-group"
-                                                 onclick="delete_data('delAbout',{{i.seqAbout}})">
+                                                 onclick="delete_data('delAbout',{{i.seq_about}})">
                                                 <a href="#" class="dropdown-toggle tooltips"
                                                    data-toggle="tooltip"
                                                    data-placement="top" data-original-title="Delete">
@@ -710,9 +728,10 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
-                                {% endif %}
-                                </tbody>
-                            </table>
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                     </section>
                 </div>
@@ -1008,9 +1027,13 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}assets-admin/js/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}assets-admin/js/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
 
+<!-- sisyphus -->
+<script type="text/javascript" src="{{ MEDIA_URL }}assets-admin/js/sisyphus.min.js"></script>
+
 <!-- validate -->
 <script type="text/javascript" src="{{ MEDIA_URL }}assets-admin/js/jquery.validate.min.js"></script>
-
+<!-- icheck jquery -->
+<script src="{{ MEDIA_URL }}assets-admin/js/iCheck/jquery.icheck.js"></script>
 
 <!--common script init for all pages-->
 <script src="{{ MEDIA_URL }}assets-admin/js/scripts.js"></script>
@@ -1018,10 +1041,16 @@
 <!--this page script-->
 <script src="{{ MEDIA_URL }}assets-admin/js/validation-init.js"></script>
 
+<!--icheck init -->
+<script src="{{ MEDIA_URL }}assets-admin/js/icheck-init.js"></script>
+
 <script type="text/javascript">
 	$('#some-textarea').wysihtml5({
 	    "image": false
 	});
+	$( function() {
+        $( "#form_about" ).sisyphus();
+    } );
 </script>
 
 </body>

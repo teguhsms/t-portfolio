@@ -12,6 +12,7 @@ urlpatterns = patterns('portal.views',
 
     #Admin Side
     url(r'^admin$','admin', name='admin'),
+    url(r'^header$', 'header', name='header'),
     url(r'^about$','about', name='about'),
 
     #Main
@@ -26,7 +27,7 @@ urlpatterns = patterns('portal.views',
     url(r'^iconPop$', 'iconPop', name='iconPop'),
     url(r'^lock_screen$', 'lock_screen', name='lock_screen'),
     #header
-    url(r'^header$', 'header', name='header'),
+
     url(r'^logo$', 'logo', name='logo'),
     url(r'^skill$', 'skill', name='skill'),
     #button

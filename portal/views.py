@@ -39,7 +39,7 @@ from datetime import datetime, timedelta
 def main(request):
 	logoData = Logo.objects.all()
 	skillData = Skill.objects.all()
-	aboutData = About.objects.all()
+	aboutData = About.objects.filter(active='True')
 	return render_to_response('main.html', locals(), context_instance=RequestContext(request))
 
 
@@ -81,27 +81,14 @@ def signup(request):
 		return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 	return render_to_response('signup.html', locals(), context_instance=RequestContext(request))
 
-
-def login(request):
-	if request.POST.get('action') == 'submit':
-		username = request.POST.get('uname')
-		password = request.POST.get('passwd')
-		try:
-			cek_auth = auth.authenticate(username=username, password=password)
-			auth.login(request, cek_auth)
-		except Exception, e:
-			json_data = {'alert': "Some information you entered doesn't look right.!!", 'link': 'login', 'err': str(e)}
-			return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
-		else:
-			json_data = {'alert': 'Login success!!', 'link': 'index2', 'err': 'tidak error'}
-			return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
-	return render_to_response('login.html', locals(), context_instance=RequestContext(request))
-
 def admin(request):
 	return render_to_response('admin_panel/admin.html', locals(), context_instance=RequestContext(request))
 
+def header(request):
+	return render_to_response('admin_panel/header.html', locals(), context_instance=RequestContext(request))
+
 def about(request):
-	aboutData = About.objects.all()
+	about_data = About.objects.all()
 	if request.POST.get('action') == 'about':
 		countDat = About.objects.all().count()
 		#save data if aboutData == 0
@@ -115,25 +102,71 @@ def about(request):
 		email = request.POST.get('email')
 		website = request.POST.get('website')
 		desc = request.POST.get('desc')
-		idAbout = request.POST.get('id')
-		dAbout = About()
-		try:
-			x = About.objects.get(seqAbout=0)
-		except Exception, e:
-			json_data = {'alert': e}
-			return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
-		else:
-			json_data = {'alert': 'Update Data Success!!'}
+		seq_about = request.POST.get('id')
+		d_about = About()
+
+		if seq_about == 'insert data':
+			d_about.name = name
+			d_about.dob = dob
+			d_about.pob = pob
+			d_about.profession = profession
+			d_about.interests = interests
+			d_about.residence = residence
+			d_about.phone = phone
+			d_about.email = email
+			d_about.website = website
+			d_about.desc = desc
+			d_about.seq_about = countDat
+			d_about.save()
+
+			about_data = About.objects.all()
+			visible_about = about_data.count()
+			json_data = {'alert':'Insert Data Success!!'}
 			return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
+		d_about = About.objects.get(seq_about=int(seq_about))
+		d_about.name = name
+		d_about.dob = dob
+		d_about.pob = pob
+		d_about.profession = profession
+		d_about.interests = interests
+		d_about.residence = residence
+		d_about.phone = phone
+		d_about.email = email
+		d_about.website = website
+		d_about.desc = desc
+		d_about.seq_about = int(seq_about)
+		d_about.save()
+
+		about_data = About.objects.all()
+		visible_about = about_data.count()
+		json_data = {'alert':'Update Data Success!!'}
+		return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
+
+	elif request.POST.get('action') == 'check':
+		#check true
+		check_true = About.objects.filter(active='True')
+		for i in check_true:
+			i.active = 'False'
+			i.save()
+
+		id = request.POST.get('id')
+		check = About.objects.get(seq_about=int(id))
+		check.active = 'True'
+		check.save()
+
+		name = check.name
+		json_data = {'alert': 'Active data '+ name +' Success!!','id':id}
+		return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
 	elif request.POST.get('action') == 'delAbout':
 		id = request.POST.get('id')
-		delData = About.objects.filter(seqAbout=int(id))
-		delData.delete()
-		aboutData = About.objects.all()
-		visibleAbout = aboutData.count()
-		return render_to_response('admin-panel/skill_table.html', locals(), context_instance=RequestContext(request))
+		del_data = About.objects.filter(seq_about=int(id))
+		del_data.delete()
+		about_data = About.objects.all()
+		visible_about = about_data.count()
+		json_data = {'alert':'Delete Data Success!!'}
+		return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
 	return render_to_response('admin_panel/about.html', locals(), context_instance=RequestContext(request))
 	#if request.user.is_authenticated():
@@ -203,6 +236,7 @@ def iconPop(request):
 	return HttpResponseRedirect('/')
 
 # Content
+'''
 def header(request):
 	if request.user.is_authenticated():
 		logoData = Logo.objects.all()
@@ -212,7 +246,7 @@ def header(request):
 		return render_to_response('admin-panel/header.html', locals(), context_instance=RequestContext(request))
 
 	return HttpResponseRedirect('/')
-
+'''
 def aboutAdmin(request):
 	aboutData = About.objects.all()
 	if request.POST.get('action') == 'about':
